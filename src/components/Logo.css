@@ -1,0 +1,49 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  letter-spacing: -0.02em; /* slightly tighter letters look more "logo-like" */
+}
+
+/* The serif font looks smaller than Inter at the same size, so bump it up 15%.
+   "em" units are relative to the parent's font size, so this works at any logo size. */
+.logo-text em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.15em;
+  color: var(--accent);
+  margin-left: 1px;
+}
+
+/* CSS width/height override the <svg width="20"> attribute. */
+.logo-md { font-size: var(--fs-h3); }
+.logo-md .logo-icon { width: 22px; height: 22px; }
+
+.logo-lg { font-size: 26px; }
+.logo-lg .logo-icon { width: 30px; height: 30px; }
+
+/*
+  Hover animation: the four bars dip and spring back one after another (a "wave").
+  - transform-box: fill-box + transform-origin: bottom → each bar scales from ITS OWN bottom
+    edge (by default SVG would scale from the corner of the whole drawing).
+  - nth-child(n) picks the n-th bar so each one can start a little later (animation-delay).
+*/
+.logo-icon rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+
+.logo:hover .logo-icon rect {
+  animation: bar-wave 600ms var(--ease-out);
+}
+.logo:hover .logo-icon rect:nth-child(2) { animation-delay: 60ms; }
+.logo:hover .logo-icon rect:nth-child(3) { animation-delay: 120ms; }
+.logo:hover .logo-icon rect:nth-child(4) { animation-delay: 180ms; }
+
+/* @keyframes describes an animation step by step: % = how far through it we are. */
+@keyframes bar-wave {
+  0%, 100% { transform: scaleY(1); }
+  40%      { transform: scaleY(0.55); }
+}

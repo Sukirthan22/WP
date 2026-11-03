@@ -1,0 +1,25 @@
+/* flex-direction: column stacks children top-to-bottom; align-items: center centres them. */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+}
+
+/* The icon gently floats up and down forever (infinite) — makes an empty page feel less dead. */
+.empty-state-icon {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.empty-state-action {
+  margin-top: var(--space-3);
+}

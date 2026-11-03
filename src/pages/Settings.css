@@ -1,0 +1,61 @@
+.settings .card + .card {
+  /* "+" = adjacent sibling: a card that comes right after another card gets a top gap. */
+  margin-top: var(--space-4);
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  margin: var(--space-3) 0 0;
+}
+
+/* Each row: label left, value right, a thin line between rows. */
+.settings-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.settings-list > div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-list dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Text on the left, control on the right; wraps underneath on narrow screens. */
+.settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.settings-danger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+}
+
+.settings-confirm {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  animation: fade-up var(--dur-med) var(--ease-out);
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}

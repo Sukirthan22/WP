@@ -1,0 +1,485 @@
+/*
+  global.css — base styles + reusable classes shared by every page.
+  Rule of thumb: if two or more components use a style, it lives here.
+  Component-only styles live next to the component (e.g. Navbar.css).
+
+  About TRANSITIONS (used a lot below):
+    transition: <property> <duration> <easing>;
+  When that property changes (e.g. on :hover), the browser animates between the old and
+  new value instead of jumping. Always put `transition` on the NORMAL state, not on :hover,
+  so it animates both ways — in AND out.
+*/
+
+/* ---------- Reset ---------- */
+
+/* box-sizing: border-box → width INCLUDES padding and border. Makes sizes predictable. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Colour of text you highlight with the mouse. */
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+h1 { font-size: var(--fs-h1); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: var(--fs-h3); font-weight: 600; }
+h4 { font-size: var(--fs-h4); font-weight: 600; }
+
+/*
+  Italic accent word in titles. Write it in JSX as:  <h2>Trade <em>History</em></h2>
+  The <em> part switches to the serif italic font in the accent colour.
+  1.15em: the serif looks smaller than Inter, so we scale it up 15% to match visually.
+*/
+h1 em,
+h2 em,
+h3 em,
+h4 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.15em;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Form elements don't inherit fonts by default — force them to. */
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- Text helpers ---------- */
+
+.muted { color: var(--text-secondary); }
+.small { font-size: var(--fs-small); }
+
+/* .num — use on every price/amount.
+   tabular-nums makes every digit the same width, so numbers don't "jiggle" when they change. */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.gain { color: var(--success); }
+.loss { color: var(--danger); }
+
+/* ---------- Page container ---------- */
+
+.page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;                 /* auto left/right margins = horizontally centred */
+  padding: var(--space-5) var(--space-4);
+}
+
+.page-title {
+  margin-bottom: var(--space-5);
+  font-size: 26px;
+}
+
+/* ---------- Entrance animation ----------
+   .fade-up: element fades in while sliding up 10px. Used when a page opens.
+   `both` (fill-mode) keeps it invisible BEFORE it starts and in place AFTER it ends.
+   Ending on `transform: none` (not translateY(0)) matters: any leftover transform would
+   break position: fixed elements inside the page, like toasts. */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.fade-up {
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-med), transform var(--dur-med) var(--ease-out);
+}
+
+/* Add .card-hover to CLICKABLE cards only (e.g. stat tiles): they lift up on hover.
+   Static cards shouldn't move — movement suggests "you can click this". */
+.card-hover:hover {
+  border-color: var(--text-secondary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  /* List every property we animate. (Avoid `transition: all` — it animates things you didn't mean to.) */
+  transition:
+    background-color var(--dur-fast),
+    border-color var(--dur-fast),
+    box-shadow var(--dur-med) var(--ease-out),
+    transform var(--dur-med) var(--ease-out);
+}
+
+/* :not(:disabled) → only enabled buttons react to the mouse. */
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px); /* lift 1px */
+}
+
+/* :active = while the mouse button is held down → "press" the button in. */
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 60ms; /* pressing should feel instant */
+}
+
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); box-shadow: var(--glow-accent); }
+
+.btn-secondary { background: var(--surface-2); border-color: var(--border); }
+.btn-secondary:hover:not(:disabled) { border-color: var(--text-secondary); box-shadow: var(--shadow-md); }
+
+.btn-ghost { background: transparent; border-color: var(--border); }
+.btn-ghost:hover:not(:disabled) { background: var(--surface-2); }
+
+.btn-buy { background: var(--success); color: var(--on-accent); }
+.btn-buy:hover:not(:disabled) { filter: brightness(1.1); box-shadow: var(--glow-success); }
+
+.btn-sell { background: var(--danger); color: #fff; }
+.btn-sell:hover:not(:disabled) { filter: brightness(1.1); box-shadow: var(--glow-danger); }
+
+.btn-danger-outline { background: transparent; color: var(--danger); border-color: var(--danger); }
+.btn-danger-outline:hover:not(:disabled) { background: var(--danger-bg); }
+
+.btn-block { width: 100%; }
+
+/* An arrow inside a button that slides right on hover:  <span className="btn-arrow">→</span> */
+.btn-arrow {
+  display: inline-block; /* transform doesn't work on plain inline elements */
+  transition: transform var(--dur-med) var(--ease-out);
+}
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* :disabled matches <button disabled>. */
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
+
+/* :focus-visible = keyboard focus only (not mouse clicks). Important for accessibility. */
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Inputs ---------- */
+
+.input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none; /* we draw our own focus style below */
+  transition: border-color var(--dur-fast), box-shadow var(--dur-med) var(--ease-out);
+}
+.input::placeholder { color: var(--text-secondary); opacity: 0.7; }
+.input:hover { border-color: var(--text-secondary); }
+
+/* Focus: orange border + a soft orange "ring" (box-shadow with 0 blur and 3px spread). */
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--ring-accent);
+}
+
+.input.has-error { border-color: var(--danger); }
+.input.has-error:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25); }
+
+.label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* ---------- Segmented tabs (History filters, chart ranges) ---------- */
+
+.seg-tabs {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.seg-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--dur-fast), color var(--dur-fast);
+}
+.seg-tab:hover {
+  color: var(--text-primary);
+  background: var(--surface-2);
+}
+.seg-tab.active {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.seg-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The little number bubble inside a tab. */
+.seg-count {
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+.seg-tab.active .seg-count {
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--on-accent);
+}
+
+/* ---------- Badges (▲ +2.34%, ▼ -1.23%) ---------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast), color var(--dur-fast);
+}
+.badge-gain { background: var(--success-bg); color: var(--success); }
+.badge-loss { background: var(--danger-bg); color: var(--danger); }
+.badge-flat { background: var(--surface-2); color: var(--text-secondary); }
+
+/* ---------- Tables ---------- */
+
+/* The wrapper scrolls sideways on small screens instead of breaking the page layout. */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;   /* merge cell borders into single lines */
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  border-bottom: 1px solid var(--border);
+}
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Rows light up under the mouse — helps the eye follow one row across many columns. */
+.table tbody tr {
+  transition: background-color var(--dur-fast);
+}
+.table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+/* .right — right-align number columns so decimal points line up. */
+.table .right { text-align: right; }
+
+/*
+  .table-stack — on small screens, each table ROW turns into a little CARD.
+  A 7-column table needs ~860px; below that, sideways scrolling would hide columns.
+
+  How:
+  - Hide the header row (<thead>).
+  - Make each <tr> a CSS grid, so its cells flow into label/value pairs.
+    repeat(auto-fit, minmax(120px, 1fr)) → 2 columns on a phone, 4–5 on a tablet.
+  - Each <td data-label="Qty"> shows its column name ABOVE the value, using
+    ::before { content: attr(data-label) } — attr() reads an HTML attribute into CSS.
+  - The cell with class .cell-head spans the full width (the card's title).
+  - .stack-hide cells disappear in card mode; .stack-only cells appear ONLY in card mode.
+*/
+.stack-only {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .table-stack .stack-hide {
+    display: none;
+  }
+  .table-stack .stack-only {
+    display: inline-flex;
+  }
+  .table-stack thead {
+    display: none;
+  }
+  .table-stack,
+  .table-stack tbody,
+  .table-stack tfoot {
+    display: block;
+  }
+  .table-stack tr {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border);
+  }
+  .table-stack tr:last-child {
+    border-bottom: none;
+  }
+  /* .table.table-stack td beats `.table .right` (more specific), so cells left-align in cards. */
+  .table.table-stack td {
+    padding: 0;
+    border: none;
+    white-space: normal;
+    text-align: left;
+  }
+  .table-stack td.cell-head {
+    grid-column: 1 / -1; /* from the first grid line to the last = full width */
+  }
+  .table-stack td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+}
+
+/* ---------- Price flash ----------
+   On each tick the price briefly glows green (up) or red (down), then fades back.
+   The JSX gives the price element key={tick}, so React re-creates it every tick
+   and the animation plays again (an animation only plays once per element). */
+.flash-up,
+.flash-down {
+  border-radius: var(--radius-sm);
+}
+.flash-up   { animation: flash-up 900ms var(--ease-out); }
+.flash-down { animation: flash-down 900ms var(--ease-out); }
+
+@keyframes flash-up {
+  from { background: rgba(34, 197, 94, 0.3); color: var(--success); }
+  to   { background: transparent; }
+}
+@keyframes flash-down {
+  from { background: rgba(239, 68, 68, 0.3); color: var(--danger); }
+  to   { background: transparent; }
+}
+
+/* ---------- "LIVE" pulsing dot ---------- */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+}
+/* A ring that grows and fades out, forever — the classic "live" signal. */
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0; /* shorthand for top/right/bottom/left: 0 → same size as the dot */
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 2s var(--ease-out) infinite;
+}
+@keyframes pulse {
+  from { transform: scale(1); opacity: 0.7; }
+  to   { transform: scale(3); opacity: 0; }
+}
+
+/* ---------- Responsive helpers ---------- */
+@media (max-width: 640px) {
+  .hide-mobile { display: none; }
+}
+
+/* ---------- Accessibility: reduced motion ----------
+   Some people get dizzy from animation and turn on "reduce motion" in their OS settings.
+   This media query detects that and switches (almost) all animation off. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

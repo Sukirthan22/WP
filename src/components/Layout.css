@@ -1,0 +1,12 @@
+/* min-height: 100vh → the frame is at least one full screen tall (vh = % of viewport height). */
+.layout {
+  min-height: 100vh;
+}
+
+/* On phones the nav bar is fixed to the BOTTOM of the screen (see Navbar.css).
+   Fixed elements float over content, so we pad the bottom to stop the last row hiding under it. */
+@media (max-width: 640px) {
+  .layout-main {
+    padding-bottom: var(--bottom-nav-h);
+  }
+}

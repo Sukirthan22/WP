@@ -1,0 +1,209 @@
+/*
+  Navbar layout
+  - Desktop: one row at the top: logo | tabs | settings.
+  - Phone (≤640px): the tabs move to a bar fixed at the BOTTOM (easy to reach with a thumb),
+    like the mobile mockups in the design system.
+*/
+
+/* position: sticky → scrolls normally, then "sticks" at top: 0 instead of leaving the screen. */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* z-index: stacking order. Higher = drawn on top of page content. */
+  /* "Frosted glass": a slightly see-through background + blur of whatever scrolls behind it.
+     color-mix() blends the surface colour with transparent → 85% opaque surface. */
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Safari needs the prefixed version */
+  border-bottom: 1px solid var(--border);
+}
+
+/* Flexbox: lays children out in a row. align-items centres them vertically. */
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  max-width: var(--content-max);
+  height: var(--header-h);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.navbar-logo {
+  display: flex;
+  border-radius: var(--radius-md);
+}
+
+/* flex: 1 → the tabs take all the space left over, pushing settings to the far right. */
+.navbar-tabs {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  gap: var(--space-2);
+}
+
+/* position: relative → makes this the reference box for the ::after underline below. */
+.navbar-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: color var(--dur-fast);
+}
+
+.navbar-tab:hover,
+.navbar-tab.active {
+  color: var(--text-primary);
+}
+.navbar-tab.active {
+  color: var(--accent);
+}
+
+/* Icons bounce up a little on hover. */
+.navbar-tab svg {
+  transition: transform var(--dur-med) var(--ease-out);
+}
+.navbar-tab:hover svg {
+  transform: translateY(-2px);
+}
+
+/*
+  Animated underline using a PSEUDO-ELEMENT.
+  ::after creates an extra invisible box inside the tab without writing more HTML.
+  It starts squashed to width 0 (scaleX(0)) and grows from the centre to full width:
+    - hover → half width (a hint)
+    - active → full width
+  Animating `transform` is cheap for the browser (no layout recalculation), so it's smooth.
+*/
+.navbar-tab::after {
+  content: ''; /* pseudo-elements only appear if they have `content`, even an empty one */
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform var(--dur-med) var(--ease-out);
+}
+.navbar-tab:hover::after {
+  transform: scaleX(0.4);
+}
+.navbar-tab.active::after {
+  transform: scaleX(1);
+}
+
+.navbar-cash {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 6px var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px; /* huge radius = fully rounded "pill" */
+  background: var(--surface-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.navbar-settings {
+  display: grid;
+  place-items: center; /* grid + place-items: center = centre in both directions */
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  transition: color var(--dur-fast), background-color var(--dur-fast);
+}
+
+/* The gear spins 90° on hover — a small, playful touch. */
+.navbar-settings svg {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.navbar-settings:hover svg {
+  transform: rotate(90deg);
+}
+
+.navbar-settings:hover,
+.navbar-settings.active {
+  color: var(--accent);
+  background: var(--surface-2);
+}
+
+/* Keyboard focus ring for all links in the navbar. */
+.navbar a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Medium screens (tablets / small laptops): logo + 3 tabs + cash chip + gear don't all fit.
+   Drop the tab icons and the "Cash" word to save ~120px instead of letting the page scroll sideways. */
+@media (max-width: 900px) {
+  .navbar-inner { gap: var(--space-3); }
+  .navbar-tab svg { display: none; }
+  .navbar-cash .muted { display: none; }
+}
+
+/* @media = "only apply these rules when the condition is true" — here, screens ≤640px wide. */
+@media (max-width: 640px) {
+  /*
+    GOTCHA: backdrop-filter (like transform and filter) turns an element into the
+    "containing block" for position: fixed children. The tab bar would then be fixed to the
+    NAVBAR instead of the SCREEN and jump to the top. So on phones the header uses a solid
+    background with no blur, and the tab bar below gets its own blur.
+  */
+  .navbar {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .navbar-inner {
+    gap: var(--space-2);
+  }
+
+  /* margin-left: auto pushes the chip (and the gear after it) to the right edge. */
+  .navbar-cash {
+    margin-left: auto;
+    padding: 4px var(--space-3);
+    font-size: 13px;
+  }
+
+  /* In the bottom bar there's room again, so bring the icons back. */
+  .navbar-tab svg { display: block; }
+
+  /* position: fixed → pinned to the screen itself, not the page. Stays put while scrolling. */
+  .navbar-tabs {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--bottom-nav-h);
+    gap: 0;
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Each tab: icon on top, label below, equal widths (flex: 1). */
+  .navbar-tab {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 0;
+    font-size: var(--fs-small);
+  }
+
+  /* On phones the indicator sits at the TOP of the bottom bar instead. */
+  .navbar-tab::after {
+    top: -1px;
+    bottom: auto;
+    left: 25%;
+    right: 25%;
+  }
+}

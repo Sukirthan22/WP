@@ -1,0 +1,59 @@
+.stat-tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* A soft glow of the tile's accent colour in the top-right corner, brighter on hover. */
+.stat-tile::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--tile-accent);
+  opacity: 0.06;
+  pointer-events: none;
+  transition: opacity var(--dur-med), transform var(--dur-med) var(--ease-out);
+}
+.stat-tile:hover::after {
+  opacity: 0.12;
+  transform: scale(1.15);
+}
+.stat-tile:hover {
+  border-color: color-mix(in srgb, var(--tile-accent) 40%, var(--border));
+}
+
+/* Icon in a tinted rounded square. color-mix blends the accent with transparent = see-through tint. */
+.stat-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--tile-accent) 15%, transparent);
+  color: var(--tile-accent);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  /* Long numbers like ₹1,00,000.00 must never burst out of a narrow tile. */
+  overflow-wrap: anywhere;
+}
+
+.stat-sub {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .stat-value { font-size: 17px; }
+  .stat-icon { width: 30px; height: 30px; }
+  .stat-icon svg { width: 16px; height: 16px; }
+}

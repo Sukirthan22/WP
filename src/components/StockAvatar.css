@@ -1,0 +1,29 @@
+/* hsl(hue saturation lightness / alpha) — an easy way to make colours from a single hue.
+   Background: faint tint (alpha 0.18). Text: brighter version of the same hue. */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0; /* never squash the circle when space is tight */
+  border-radius: 50%; /* 50% radius on a square = circle */
+  background: hsl(var(--hue) 70% 50% / 0.18);
+  color: hsl(var(--hue) 80% 65%);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* On a light background the bright text is too faint — use a darker shade of the same hue. */
+[data-theme='light'] .avatar {
+  color: hsl(var(--hue) 70% 38%);
+}
+
+.avatar-md {
+  width: 36px;
+  height: 36px;
+  font-size: var(--fs-small);
+}
+
+.avatar-lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--fs-h4);
+}

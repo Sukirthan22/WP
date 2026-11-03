@@ -1,0 +1,133 @@
+.ticket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+/* ---------- Buy / Sell segmented control ---------- */
+
+/*
+  The coloured "pill" behind the active button is ONE pseudo-element (::before) that slides
+  left/right with transform. That's smoother than switching backgrounds on the buttons.
+  `isolation: isolate` + z-index -1 on the pill keeps it behind the button text.
+*/
+.segmented {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal columns */
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.segmented::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--radius-sm);
+  background: var(--success);
+  transition: transform var(--dur-med) var(--ease-out), background-color var(--dur-med);
+}
+
+/* SELL active → slide the pill one full width (100% of its own width) to the right, turn red. */
+.segmented-sell::before {
+  transform: translateX(100%);
+  background: var(--danger);
+}
+
+.segmented button {
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--dur-fast);
+}
+.segmented button:hover {
+  color: var(--text-primary);
+}
+/* Attribute selector: matches buttons whose aria-pressed attribute is "true". */
+.segmented button[aria-pressed='true'] {
+  color: var(--on-accent);
+}
+.segmented-sell button[aria-pressed='true'] {
+  color: #fff;
+}
+
+/* ---------- Rows ---------- */
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ticket-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border);
+}
+
+.ticket-price {
+  font-size: var(--fs-h4);
+  font-weight: 600;
+}
+
+.ticket-strong {
+  font-weight: 700;
+}
+
+.ticket-qty-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: calc(-1 * var(--space-2)); /* pull the stepper closer to its label */
+}
+.ticket-qty-head .label {
+  margin-bottom: 0;
+}
+
+.ticket-max {
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--dur-fast), border-color var(--dur-fast);
+}
+.ticket-max:hover {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+
+.ticket-warning {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--danger-bg);
+  color: var(--danger);
+  animation: fade-up var(--dur-med) var(--ease-out);
+}
+
+.ticket-submit {
+  min-height: 46px;
+  font-size: var(--fs-h4);
+}
+
+.ticket-note {
+  text-align: center;
+  margin-top: calc(-1 * var(--space-1));
+}

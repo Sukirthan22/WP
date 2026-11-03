@@ -1,0 +1,114 @@
+.sd-back {
+  margin-bottom: var(--space-5);
+}
+
+/* CSS GRID: one column by default (phones) → two columns on wide screens (media query below).
+   "Mobile first": write the simple layout first, then add complexity for bigger screens. */
+.sd-grid {
+  display: grid;
+  /* minmax(0, 1fr) = "take the full width, but never grow wider because of a child".
+     A plain auto column would stretch to fit the widest child and overflow the phone screen. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+@media (min-width: 900px) {
+  .sd-grid {
+    grid-template-columns: minmax(0, 1fr) 340px; /* info takes the rest, ticket is 340px wide */
+    align-items: start;
+  }
+
+  /* The ticket stays in view while you scroll the left column. */
+  .sd-side {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-4));
+  }
+}
+
+/* min-width: 0 lets grid children shrink below their content width (prevents overflow). */
+.sd-main {
+  min-width: 0;
+}
+
+.sd-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+/* flex-wrap: on narrow screens the badge drops to a new line instead of overflowing. */
+.sd-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.sd-price {
+  display: inline-block;
+  padding: 0 var(--space-1);
+  margin-left: calc(-1 * var(--space-1)); /* cancel the padding so the text lines up with the title */
+  font-size: var(--fs-h1);
+  font-weight: 700;
+}
+
+.sd-abs {
+  font-weight: 600;
+}
+
+/* ---------- Chart card ---------- */
+
+.sd-chart {
+  margin-top: var(--space-5);
+}
+
+.sd-chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.sd-chart-head .seg-tab {
+  padding: 4px var(--space-3);
+  font-size: var(--fs-small);
+}
+
+/* 4 stats in a row on wide screens, 2×2 on phones (auto-fit decides). */
+.sd-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.sd-stats dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+/* ---------- Your position ---------- */
+
+.sd-position {
+  margin-top: var(--space-4);
+}
+
+/* auto-fit + minmax: "fit as many 130px+ columns as there's room for".
+   5 columns on desktop, 2 on phones — no media query needed. */
+.sd-position-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin: var(--space-3) 0 0;
+}
+
+.sd-position-grid dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}

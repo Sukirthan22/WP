@@ -1,0 +1,118 @@
+/* Title on the left, live status on the right. flex-wrap lets it drop below on small screens. */
+.wl-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.wl-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-weight: 600;
+}
+
+/* Search box: the icon is absolutely positioned INSIDE the input's left padding. */
+.wl-search {
+  position: relative;
+  margin-bottom: var(--space-4);
+}
+
+.wl-search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%); /* top 50% + move up by half its own height = vertically centred */
+  color: var(--text-secondary);
+  pointer-events: none; /* clicks pass through the icon to the input */
+}
+
+.wl-search-input {
+  padding-left: 36px;
+  min-height: 44px;
+}
+
+/* ---------- Rows ---------- */
+
+.wl-row {
+  cursor: pointer;
+}
+
+/* A coloured bar on the left edge of the row on hover/focus (like the design's selected row).
+   inset box-shadow draws INSIDE the element, so it doesn't change the row's size. */
+.wl-row:hover,
+.wl-row:focus-visible {
+  outline: none;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.wl-stock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0; /* allows the name inside to shrink and show "…" */
+}
+
+.wl-names {
+  min-width: 0;
+}
+
+.wl-symbol {
+  font-weight: 600;
+  transition: color var(--dur-fast);
+}
+.wl-row:hover .wl-symbol {
+  color: var(--accent);
+}
+
+/* text-overflow: ellipsis shows "…" when text is too long.
+   It needs all three: overflow hidden, white-space nowrap, and a max width. */
+.wl-name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wl-price {
+  display: inline-block;
+  padding: 2px 6px;
+  font-weight: 600;
+}
+
+.wl-abs {
+  margin-top: 2px;
+}
+
+.sparkline {
+  display: block;
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 640px) {
+  .wl-table th,
+  .wl-table td {
+    padding: var(--space-3) var(--space-2);
+  }
+  .wl-table th:first-child,
+  .wl-table td:first-child {
+    padding-left: var(--space-3);
+  }
+  .wl-table th:last-child,
+  .wl-table td:last-child {
+    padding-right: var(--space-3);
+  }
+
+  .wl-stock { gap: var(--space-2); }
+  .wl-name { max-width: 76px; }
+  .wl-price { font-size: 13px; padding: 2px 4px; }
+  .wl-symbol { font-size: 13px; }
+  .wl-abs { font-size: 11px; }
+
+  /* Shrink the avatar and badge a bit — every pixel counts at 360px wide. */
+  .wl-table .avatar { width: 28px; height: 28px; font-size: 10px; }
+  .wl-table .badge { padding: 2px 5px; font-size: 11px; }
+}

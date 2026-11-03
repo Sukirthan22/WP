@@ -1,0 +1,91 @@
+.pf-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+}
+
+.pf-networth {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+/* repeat(auto-fit, minmax(200px, 1fr)): as many columns as fit, each at least 200px,
+   sharing leftover space equally. 4 columns on a laptop, fewer on smaller screens. */
+.pf-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+
+.pf-section-title {
+  margin: var(--space-6) 0 var(--space-3);
+}
+
+.pf-row {
+  cursor: pointer;
+}
+.pf-row:hover,
+.pf-row:focus-visible {
+  outline: none;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.pf-stock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pf-symbol {
+  font-weight: 600;
+  transition: color var(--dur-fast);
+}
+.pf-row:hover .pf-symbol {
+  color: var(--accent);
+}
+
+.pf-pnl {
+  font-weight: 600;
+}
+
+/* Totals row: bold, slightly highlighted background. */
+.pf-total td {
+  background: var(--surface-2);
+  font-weight: 600;
+  border-top: 1px solid var(--border);
+}
+
+.pf-note {
+  margin-top: var(--space-3);
+}
+
+/* Phones: exactly two tiles per row. minmax(0, 1fr) lets them shrink instead of overflowing. */
+@media (max-width: 640px) {
+  .pf-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+  .pf-tiles .stat-tile {
+    padding: var(--space-3);
+  }
+}
+
+/* Card mode (same breakpoint as .table-stack in global.css). */
+@media (max-width: 860px) {
+  /* The row (not each cell) carries the totals background. */
+  .pf-total {
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+  .pf-total td {
+    background: none;
+    border-top: none;
+  }
+}

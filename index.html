@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+  index.html — the ONLY real HTML page in the app (a "Single Page Application").
+  React takes over the empty <div id="root"> below and draws every screen inside it.
+  Changing "pages" does not load a new HTML file; React Router just swaps components.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport meta: makes the page use the phone's real width instead of zooming out.
+         Without it, mobile CSS (media queries) would not work properly. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PaperTrade — practice trading Indian stocks with virtual cash." />
+    <title>PaperTrade</title>
+    <!-- Files in /public are served as-is, so /favicon.svg is public/favicon.svg. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#080f14" />
+
+    <!-- Fonts: Inter for text, JetBrains Mono for numbers,
+         Instrument Serif (italic) for the accent word in titles. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- type="module" lets the browser use import/export. Vite serves main.jsx from here. -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
